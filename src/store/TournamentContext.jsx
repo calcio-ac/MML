@@ -4,6 +4,7 @@ import { computeStandings, topScorers } from '../lib/standings.js'
 import { resolveKnockouts } from '../lib/fixtures.js'
 import { scoreOf } from '../lib/score.js'
 import { demoState } from './demo.js'
+import { SPONSORS } from '../data/seedData.js'
 
 // table name in DB → key in state, primary key function
 export const TABLES = {
@@ -58,7 +59,7 @@ export function TournamentProvider({ children }) {
       if (err) { setError(err.error.message); setLoading(false); return }
       dispatch({ type: 'load', data: {
         teams: teams.data, players: players.data, matches: matches.data, events: events.data, lineups: lineups.data,
-        sponsors: sponsors.data, settings: { ...empty.settings, ...Object.fromEntries(settings.data.map(s => [s.key, s.value])) },
+        sponsors: sponsors.data.length ? sponsors.data : SPONSORS, settings: { ...empty.settings, ...Object.fromEntries(settings.data.map(s => [s.key, s.value])) },
       } })
       setLoading(false)
     }
