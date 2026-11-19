@@ -1,0 +1,1 @@
+{ "rewrites": [{ "source": "/((?!logos/|assets/).*)", "destination": "/index.html" }] }

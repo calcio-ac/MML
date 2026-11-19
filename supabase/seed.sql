@@ -33,5 +33,7 @@ insert into matches (id, stage, number, home_team_id, away_team_id, home_source,
   ('F', 'final', 1, null, null, 'W:SF1', 'W:SF2', '2026-11-22T12:15:00.000Z')
 on conflict (id) do nothing;
 
-insert into settings (key, value) values ('match_minutes', '10'), ('match_day', '"2026-11-22"')
+insert into settings (key, value) values
+  ('match_minutes', '10'),
+  ('match_day', '"2026-11-22"')
 on conflict (key) do nothing;

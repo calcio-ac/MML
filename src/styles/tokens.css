@@ -1,0 +1,20 @@
+:root {
+  --navy: #0B2A3E;
+  --navy-deep: #061B2B;
+  --navy-line: #1A3D55;
+  --red: #C8373A;
+  --red-deep: #9E2629;
+  --paper: #F4F1EA;
+  --paper-dim: #B9C3CB;
+  --live: #FF4D4F;
+  --gold: #E8B64C;
+
+  --display: 'Bebas Neue', 'Horizon', Impact, sans-serif;
+  --body: 'DM Sans Variable', 'DM Sans', system-ui, sans-serif;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px; --s8: 72px;
+  --tab-h: 64px;
+  --bar-h: 52px;
+  --dots: radial-gradient(circle, rgba(244, 241, 234, .09) 1.1px, transparent 1.4px);
+  --dots-red: radial-gradient(circle, rgba(200, 55, 58, .55) 1.2px, transparent 1.6px);
+}
