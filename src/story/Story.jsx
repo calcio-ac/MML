@@ -54,8 +54,9 @@ export default function Story() {
     const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting })
     io.observe(cv)
     window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', () => { resize(); onScroll() })
-    return () => { cancelAnimationFrame(raf); io.disconnect(); window.removeEventListener('scroll', onScroll) }
+    const onResize = () => { resize(); onScroll() }
+    window.addEventListener('resize', onResize)
+    return () => { cancelAnimationFrame(raf); io.disconnect(); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onResize) }
   }, [])
 
   const { seg, local } = state

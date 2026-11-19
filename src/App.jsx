@@ -25,6 +25,7 @@ function PublicShell({ children }) {
   return (
     <div className="app">
       <LiveBar />
+      {DEMO && <p className="notice" style={{ position: 'fixed', top: 56, left: 12, right: 12, zIndex: 25, margin: 0, padding: '6px 12px' }}>Preview with sample data. Scores aren't real until Supabase is connected.</p>}
       {error && <p className="notice" style={{ position: 'fixed', top: 60, left: 16, right: 16, zIndex: 40 }}>Can't reach the scores server: {error}. Pull to refresh in a moment.</p>}
       {children}
       <div className="page" style={{ paddingTop: 0 }}><Footer /></div>
@@ -37,7 +38,6 @@ export default function App() {
   return (
     <TournamentProvider>
       <ScrollTop />
-      {DEMO && <div className="sr">Demo data: Supabase is not connected</div>}
       <Routes>
         <Route path="/admin/*" element={<Suspense fallback={null}><Admin /></Suspense>} />
         <Route path="/" element={<PublicShell><Home /></PublicShell>} />

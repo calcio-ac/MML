@@ -35,7 +35,7 @@ export default function Admin() {
   const { dispatch, loading } = useTournament()
   const api = useMemo(() => makeApi(dispatch), [dispatch])
   const [session, setSession] = useState(hasSupabase ? undefined : { demo: true })
-  const [isAdmin, setIsAdmin] = useState(!hasSupabase)
+  const [isAdmin, setIsAdmin] = useState(hasSupabase ? null : true)
   const [toast, setToast] = useState(null)
   const say = (msg, kind = 'err') => { setToast({ msg, kind }); setTimeout(() => setToast(null), 3500) }
 
@@ -47,6 +47,7 @@ export default function Admin() {
   }, [])
   useEffect(() => {
     if (!hasSupabase || !session) return
+    setIsAdmin(null)
     supabase.from('admins').select('user_id').eq('user_id', session.user.id).maybeSingle()
       .then(({ data }) => setIsAdmin(Boolean(data)))
   }, [session])
@@ -56,7 +57,7 @@ export default function Admin() {
     try { return await fn(...a) } catch (e) { say(`Not saved: ${e.message}`); throw e }
   }])), [api])
 
-  if (session === undefined || loading) return <div className="adm"><p className="adm-pad muted">Loading…</p></div>
+  if (session === undefined || loading || (session && isAdmin === null)) return <div className="adm"><p className="adm-pad muted">Loading…</p></div>
   if (!session) return <div className="adm">{toast && <div className="toast err">{toast.msg}</div>}<Login onError={say} /></div>
   if (!isAdmin) return (
     <div className="adm adm-pad">
