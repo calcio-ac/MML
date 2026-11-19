@@ -100,6 +100,16 @@ create or replace function is_admin() returns boolean language sql stable securi
 $$;
 
 -- ============================================================
+-- Table privileges (newer Supabase projects don't grant these automatically)
+-- ============================================================
+grant usage on schema public to anon, authenticated;
+grant select on all tables in schema public to anon, authenticated;
+grant insert, update, delete on all tables in schema public to authenticated;
+grant execute on function is_admin() to anon, authenticated;
+alter default privileges in schema public grant select on tables to anon, authenticated;
+alter default privileges in schema public grant insert, update, delete on tables to authenticated;
+
+-- ============================================================
 -- Row level security: everyone reads, only admins write
 -- ============================================================
 do $$
