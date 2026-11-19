@@ -4,6 +4,7 @@ import MatchRow from '../components/MatchRow.jsx'
 import StandingsTable from '../components/StandingsTable.jsx'
 import Sponsors from '../components/Sponsors.jsx'
 import { ScorerList } from './Stats.jsx'
+import Story from '../story/Story.jsx'
 
 export function HomeContent() {
   const { matches } = useTournament()
@@ -27,4 +28,4 @@ export function HomeContent() {
     </main>
   )
 }
-export default function Home() { return <HomeContent /> }
+export default function Home() { return <><Story /><HomeContent /></> }
