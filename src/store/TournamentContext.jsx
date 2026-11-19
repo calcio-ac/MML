@@ -80,7 +80,7 @@ export function TournamentProvider({ children }) {
     const team = id => state.teams.find(t => t.id === id)
     const player = id => state.players.find(p => p.id === id)
     return {
-      ...state, matches, loading, error, standings, groupDone, dispatch,
+      ...state, rawMatches: state.matches, matches, loading, error, standings, groupDone, dispatch,
       scorers: topScorers(state.events, state.players),
       team, player,
       score: m => scoreOf(m, state.events),
