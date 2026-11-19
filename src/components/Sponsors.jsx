@@ -1,23 +1,25 @@
 import { useTournament } from '../store/TournamentContext.jsx'
-const Wrap = ({ s, children, className }) => s.url
-  ? <a className={className} href={s.url} target="_blank" rel="noopener">{children}</a>
-  : <div className={className}>{children}</div>
-function Logo({ s, lazy }) {
-  return <img src={s.logo_url} alt={s.name} loading={lazy ? 'lazy' : undefined}
-    onError={e => { const img = e.currentTarget; img.replaceWith(Object.assign(document.createElement('b'), { textContent: s.name, style: 'color:#0B2A3E;text-align:center' })) }} />
+
+function Tile({ s, hidden }) {
+  const img = <img src={s.logo_url} alt={hidden ? '' : s.name} />
+  return s.url
+    ? <a className="sp-tile" href={s.url} target="_blank" rel="noopener" tabIndex={hidden ? -1 : undefined} aria-hidden={hidden || undefined}>{img}</a>
+    : <div className="sp-tile" aria-hidden={hidden || undefined}>{img}</div>
 }
+
+// One row of equal tiles scrolling sideways forever. The list is drawn twice so the loop is seamless.
 export default function Sponsors() {
   const { sponsors } = useTournament()
-  const sorted = [...sponsors].sort((a, b) => a.sort - b.sort)
-  const title = sorted.filter(s => s.tier === 'title'), rest = sorted.filter(s => s.tier !== 'title')
-  if (!sorted.length) return null
+  const list = [...sponsors].sort((a, b) => a.sort - b.sort)
+  if (!list.length) return null
+  const seconds = Math.max(18, list.length * 5)
   return (
     <section className="section" aria-labelledby="sp-h">
       <h2 id="sp-h">Our sponsors</h2>
-      <div className="sponsors">
-        {title.map(s => <Wrap key={s.id} s={s} className="sp-title"><Logo s={s} /></Wrap>)}
-        <div className="sp-grid">
-          {rest.map(s => <Wrap key={s.id} s={s} className="sp-tile"><Logo s={s} lazy /></Wrap>)}
+      <div className="marquee" style={{ '--dur': `${seconds}s` }}>
+        <div className="marquee-track">
+          {list.map(s => <Tile key={s.id} s={s} />)}
+          {list.map(s => <Tile key={`${s.id}-2`} s={s} hidden />)}
         </div>
       </div>
     </section>

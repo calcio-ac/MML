@@ -154,3 +154,20 @@ describe('FORMATIONS', () => {
     expect(Object.keys(FORMATIONS).sort()).toEqual(['1-1-2', '1-2-1', '2-1-1', '2-2', '3-1'])
   })
 })
+
+import { shiftKickoffs } from './fixtures.js'
+describe('shiftKickoffs', () => {
+  const ms = ['09:00', '09:15', '09:30', '10:00'].map((t, i) => ({ id: `M${i}`, kickoff_at: `2026-11-22T${t}:00.000Z` }))
+  it('moves the edited match and every later one by the same amount', () => {
+    const ch = shiftKickoffs(ms, 'M0', '2026-11-22T12:00:00.000Z', true)
+    expect(ch.map(c => c.kickoff_at.slice(11, 16))).toEqual(['12:00', '12:15', '12:30', '13:00'])
+  })
+  it('leaves earlier matches alone when editing a middle one', () => {
+    const ch = shiftKickoffs(ms, 'M2', '2026-11-22T09:40:00.000Z', true)
+    expect(ch.map(c => c.id)).toEqual(['M2', 'M3'])
+    expect(ch[1].kickoff_at.slice(11, 16)).toBe('10:10')
+  })
+  it('changes only that match when cascade is off', () => {
+    expect(shiftKickoffs(ms, 'M0', '2026-11-22T12:00:00.000Z', false)).toEqual([{ id: 'M0', kickoff_at: '2026-11-22T12:00:00.000Z' }])
+  })
+})

@@ -37,6 +37,17 @@ export default function Live({ api, say }) {
   const resume = () => act(() => api.update('matches', m.id, { status: 'live', clock_started_at: nowIso() }))
   const end = () => act(() => api.update('matches', m.id, { status: 'ft', clock_offset_s: Math.round(elapsed), clock_started_at: null }))
   const reopen = () => act(() => api.update('matches', m.id, { status: 'paused' }))
+  const reset = () => {
+    if (!confirm(`Reset ${h?.short_name ?? 'home'} v ${a?.short_name ?? 'away'}? This deletes its ${ev.length} goal/card entries and sets it back to not started.`)) return
+    act(async () => {
+      for (const e of ev) await api.remove('match_events', e.id)
+      await api.update('matches', m.id, {
+        status: 'scheduled', clock_started_at: null, clock_offset_s: 0, home_pens: null, away_pens: null,
+        ...(m.stage !== 'group' ? { home_team_id: null, away_team_id: null } : {}),
+      })
+      say('Match reset', 'ok')
+    })
+  }
   const next = () => { const i = matches.findIndex(x => x.id === m.id); if (matches[i + 1]) setId(matches[i + 1].id) }
 
   const sideTeam = side => (side === 'home' ? h : a)
@@ -102,6 +113,8 @@ export default function Live({ api, say }) {
           </div>
         </div>
       )}
+
+      {m.status !== 'scheduled' && <button className="reset" disabled={busy} onClick={reset}>Reset match</button>}
 
       <ul className="adm-events">
         {[...ev].reverse().map(e => <li key={e.id}><span>{evName(e)}</span><span className="muted">{team(e.team_id)?.short_name}</span></li>)}

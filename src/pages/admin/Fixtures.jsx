@@ -1,5 +1,6 @@
 import { useTournament } from '../../store/TournamentContext.jsx'
-import { roundRobin } from '../../lib/fixtures.js'
+import { useState } from 'react'
+import { roundRobin, shiftKickoffs } from '../../lib/fixtures.js'
 import { stageShort, sourceLabel } from '../../components/format.js'
 
 // Match day is in November → Europe/Rome is UTC+1.
@@ -12,6 +13,13 @@ export default function Fixtures({ api, say }) {
   const day = settings.match_day || '2026-11-22'
   const group = matches.filter(m => m.stage === 'group')
   const started = group.some(m => m.status !== 'scheduled')
+  const [cascade, setCascade] = useState(true)
+  async function setTime(m, hhmm) {
+    if (!hhmm || hhmm === toLocal(m.kickoff_at)) return
+    const changes = shiftKickoffs(raw, m.id, fromLocal(day, hhmm), cascade)
+    for (const c of changes) await api.update('matches', c.id, { kickoff_at: c.kickoff_at })
+    say(changes.length > 1 ? `Moved ${changes.length} matches` : 'Kick-off updated', 'ok')
+  }
   async function regenerate() {
     if (started) return say('Group matches have started, so fixtures are locked.')
     if (!confirm('Replace all 10 group fixtures with a new round-robin order? Kick-off times stay.')) return
@@ -34,11 +42,14 @@ export default function Fixtures({ api, say }) {
   return (
     <div className="adm-pad">
       <p className="muted">Times are Milan time on {day}. Semis and final fill in automatically from the table; pick a team only to override.</p>
+      <div className="fx-tools">
+        <label className="chk"><input type="checkbox" checked={cascade} onChange={e => setCascade(e.target.checked)} />When I change a kick-off, move every later match by the same amount</label>
+      </div>
       <ul className="fx">
         {matches.map(m => (
           <li key={m.id}>
             <b>{stageShort(m)}</b>
-            <input type="time" defaultValue={toLocal(m.kickoff_at)} aria-label="Kick-off" onBlur={e => e.target.value && api.update('matches', m.id, { kickoff_at: fromLocal(day, e.target.value) })} />
+            <input key={m.kickoff_at} type="time" defaultValue={toLocal(m.kickoff_at)} aria-label="Kick-off" onBlur={e => setTime(m, e.target.value)} onKeyDown={e => e.key === 'Enter' && e.currentTarget.blur()} />
             {teamSelect(m, 'home')}<span className="muted">v</span>{teamSelect(m, 'away')}
             <span className={`pill ${m.status === 'ft' ? 'ft' : m.status === 'scheduled' ? 'next' : 'live'}`}>{m.status === 'ft' ? 'FT' : m.status === 'scheduled' ? 'Upcoming' : 'Live'}</span>
           </li>

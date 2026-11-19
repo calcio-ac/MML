@@ -92,3 +92,7 @@
 .sp-fields { display: grid; gap: 6px; }
 .sp-btns { display: grid; gap: 6px; }
 .sp-btns button { width: 44px; min-height: 40px; border: 1px solid var(--navy-line); background: transparent; color: var(--paper); border-radius: 10px; cursor: pointer; }
+.reset { width: 100%; margin-top: var(--s4); min-height: 48px; border-radius: 12px; border: 1px dashed var(--live); background: transparent; color: var(--live); font-weight: 700; }
+.fx-tools { display: grid; gap: var(--s2); background: var(--navy); border-radius: 12px; padding: var(--s3); }
+.fx-tools label.chk { display: flex; align-items: center; gap: 10px; color: var(--paper); font-size: 15px; }
+.fx-tools label.chk input { width: 22px; min-height: 22px; }

@@ -49,3 +49,15 @@ export function resolveKnockouts(matches, standings, groupDone, events) {
   const byId = new Map(resolved.map(m => [m.id, m]))
   return matches.map(m => byId.get(m.id))
 }
+
+/** Kick-off changes when one match is moved; with cascade, every later match shifts by the same delta. */
+export function shiftKickoffs(matches, id, newIso, cascade) {
+  const target = matches.find(m => m.id === id)
+  if (!target) return []
+  const oldT = Date.parse(target.kickoff_at), delta = Date.parse(newIso) - oldT
+  const out = [{ id, kickoff_at: new Date(Date.parse(newIso)).toISOString() }]
+  if (!cascade || !delta || Number.isNaN(oldT)) return out
+  for (const m of [...matches].sort((a, b) => Date.parse(a.kickoff_at) - Date.parse(b.kickoff_at)))
+    if (m.id !== id && Date.parse(m.kickoff_at) > oldT) out.push({ id: m.id, kickoff_at: new Date(Date.parse(m.kickoff_at) + delta).toISOString() })
+  return out
+}
