@@ -12,51 +12,51 @@ const CHAPTERS = [
 const N = SCENES.length
 const reduce = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
+const CHAPTER_S = 5.5 // seconds per chapter; the finale then holds
+
 export default function Story() {
-  const wrap = useRef(null), canvas = useRef(null)
+  const canvas = useRef(null)
   const [state, setState] = useState({ seg: 0, local: 0 })
-  const progress = useRef(0)
+  const clock = useRef({ t0: performance.now(), offset: 0 }) // offset lets dots jump to a chapter
+
+  const jump = i => { clock.current = { t0: performance.now(), offset: i * CHAPTER_S } }
+  const replay = () => jump(0)
 
   useEffect(() => {
     const cv = canvas.current, ctx = cv.getContext('2d')
     let raf = 0, visible = true, w = 0, h = 0
-    const t0 = performance.now()
+    const tStart = performance.now()
+    if (reduce()) clock.current.offset = (N - 1) * CHAPTER_S // reduced motion: go straight to the finale
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
       w = cv.clientWidth; h = cv.clientHeight
       cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
-    const onScroll = () => {
-      const r = wrap.current.getBoundingClientRect()
-      const total = r.height - window.innerHeight
-      progress.current = Math.min(1, Math.max(0, -r.top / total))
-      const x = progress.current * N
-      const seg = Math.min(N - 1, Math.floor(x)), local = Math.min(1, x - seg)
-      setState(s => (s.seg === seg && Math.abs(s.local - local) < 0.01 ? s : { seg, local }))
-      if (reduce()) draw(0)
-    }
-    const draw = (now) => {
-      const t = reduce() ? 2 : (now - t0) / 1000
-      const x = progress.current * N
-      const seg = Math.min(N - 1, Math.floor(x)), local = reduce() ? 0.999 : Math.min(1, x - seg)
+    const draw = now => {
+      const t = reduce() ? 2 : (now - tStart) / 1000
+      const played = clock.current.offset + (now - clock.current.t0) / 1000
+      const x = Math.min(N - 1 + 0.999, played / CHAPTER_S)
+      const seg = Math.min(N - 1, Math.floor(x)), local = seg === N - 1 ? Math.min(1, x - seg) : x - seg
       SCENES[seg](ctx, w, h, local, t)
-      // crossfade into the next chapter over the last 15% of this one
-      if (seg < N - 1 && local > 0.85) {
+      if (seg < N - 1 && local > 0.85) { // crossfade into the next chapter
         ctx.globalAlpha = (local - 0.85) / 0.15
         SCENES[seg + 1](ctx, w, h, 0, t)
         ctx.globalAlpha = 1
       }
+      setState(st => (st.seg === seg && Math.abs(st.local - local) < 0.01 ? st : { seg, local }))
     }
-    const loop = now => { if (visible) draw(now); raf = requestAnimationFrame(loop) }
-    resize(); onScroll()
-    if (reduce()) draw(0); else raf = requestAnimationFrame(loop)
+    const loop = now => {
+      if (visible) draw(now)
+      else clock.current.t0 += 16 // paused while off-screen, so nobody misses the story
+      raf = requestAnimationFrame(loop)
+    }
+    resize()
+    raf = requestAnimationFrame(loop)
     const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting })
     io.observe(cv)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    const onResize = () => { resize(); onScroll() }
-    window.addEventListener('resize', onResize)
-    return () => { cancelAnimationFrame(raf); io.disconnect(); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onResize) }
+    window.addEventListener('resize', resize)
+    return () => { cancelAnimationFrame(raf); io.disconnect(); window.removeEventListener('resize', resize) }
   }, [])
 
   const { seg, local } = state
@@ -65,7 +65,7 @@ export default function Story() {
   const skip = () => document.getElementById('scores')?.scrollIntoView({ behavior: reduce() ? 'auto' : 'smooth' })
 
   return (
-    <section ref={wrap} className="story" style={{ height: `${N * 110}vh` }} aria-label="The MML story">
+    <section className="story" aria-label="The MML story">
       <div className="story-stage">
         <canvas ref={canvas} className="story-canvas" aria-hidden="true" />
         {ch && (
@@ -80,14 +80,21 @@ export default function Story() {
             <h1>MML<br />4.0</h1>
             <p>Milan Malayali League, Sunday 22 November 2026</p>
             <p className="org">Organised by Milan Malayali Network</p>
-            <button className="btn" onClick={skip}>See live scores</button>
+            <div className="story-final-btns">
+              <button className="btn" onClick={skip}>See live scores</button>
+              <button className="btn ghost" onClick={replay}>Watch again</button>
+            </div>
           </div>
         )}
-        {seg === 0 && local < 0.3 && <div className="story-hint" style={{ opacity: 1 - local / 0.3 }}>Scroll to follow his story</div>}
-        {seg < N - 1 && <button className="story-skip" onClick={skip}>Skip to scores</button>}
-        <div className="story-dots" aria-hidden="true">{SCENES.map((_, i) => <i key={i} className={i === seg ? 'on' : ''} />)}</div>
+        {seg < N - 1 && <button className="story-skip" onClick={() => jump(N - 1)}>Skip</button>}
+        <div className="story-dots">
+          {SCENES.map((_, i) => (
+            <button key={i} className={i === seg ? 'on' : ''} onClick={() => jump(i)} aria-label={i < N - 1 ? `Chapter ${i + 1}: ${CHAPTERS[i].title}` : 'Finale'}>
+              <i style={i === seg ? { '--p': i === N - 1 ? 1 : local } : undefined} />
+            </button>
+          ))}
+        </div>
       </div>
-      {/* screen-reader version of the story */}
       <div className="sr">{CHAPTERS.filter(Boolean).map(c => `${c.title}. ${c.body}`).join(' ')}</div>
     </section>
   )
