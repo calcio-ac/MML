@@ -25,3 +25,4 @@
 .story-dots i::after { content: ''; position: absolute; inset: 0; background: var(--paper); transform-origin: left; transform: scaleX(var(--p, 0)); }
 .story-final-btns { display: flex; gap: var(--s2); flex-wrap: wrap; justify-content: center; margin-top: var(--s3); }
 .story-final .btn.ghost { background: rgba(6,27,43,.35); border-color: rgba(244,241,234,.5); }
+.story-final .org a { color: inherit; text-underline-offset: 3px; }

@@ -187,6 +187,8 @@ h3 { font-size: 26px; }
 .footer { margin-top: var(--s8); padding-top: var(--s5); border-top: 1px solid var(--navy-line); display: grid; gap: var(--s4); font-size: 14px; color: var(--paper-dim); }
 .footer .orgs { display: flex; align-items: center; gap: var(--s4); flex-wrap: wrap; }
 .footer .orgs img { height: 56px; width: 56px; border-radius: 10px; object-fit: cover; }
+.footer .mmn { color: var(--paper); font-weight: 600; text-underline-offset: 3px; }
+.footer .orgs a { display: inline-flex; }
 .footer .cac { display: flex; align-items: center; gap: var(--s2); }
 .footer .cac a { display: inline-flex; align-items: center; gap: 8px; color: var(--paper); font-weight: 700; text-decoration: none; }
 .footer .cac img { height: 22px; width: auto; }

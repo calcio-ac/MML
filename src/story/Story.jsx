@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { SCENES } from './scenes.js'
 import './story.css'
+import { MMN_URL } from '../components/Footer.jsx'
 
 const CHAPTERS = [
   { title: 'Kerala, every evening', body: 'Bare feet, a plastic ball, the backwaters turning gold. He played until it was too dark to see.' },
@@ -79,7 +80,7 @@ export default function Story() {
             <img src="/logos/mml.webp" alt="" />
             <h1>MML<br />4.0</h1>
             <p>Milan Malayali League, Sunday 22 November 2026</p>
-            <p className="org">Organised by Milan Malayali Network</p>
+            <p className="org">Organised by <a href={MMN_URL} target="_blank" rel="noopener">Milan Malayali Network</a></p>
             <div className="story-final-btns">
               <button className="btn" onClick={skip}>See live scores</button>
               <button className="btn ghost" onClick={replay}>Watch again</button>
