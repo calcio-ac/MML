@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTournament } from '../store/TournamentContext.jsx'
 import MatchRow from '../components/MatchRow.jsx'
+import { VENUE } from '../components/Venue.jsx'
 
 const FILTERS = [['all', 'All'], ['group', 'Group'], ['ko', 'Semis & final']]
 export default function Matches() {
@@ -12,7 +13,7 @@ export default function Matches() {
   return (
     <main className="page">
       <h1 style={{ fontSize: 64 }}>Matches</h1>
-      <p className="muted">Sunday 22 November 2026 · one pitch, 10-minute matches</p>
+      <p className="muted">Sunday 22 November 2026 at <a href={VENUE.link} target="_blank" rel="noopener">{VENUE.name}</a>. One pitch, 10-minute matches.</p>
       <div className="filters" role="group" aria-label="Stage">
         {FILTERS.map(([k, l]) => <button key={k} aria-pressed={f === k} onClick={() => setF(k)}>{l}</button>)}
       </div>

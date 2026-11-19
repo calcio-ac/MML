@@ -4,6 +4,7 @@ import MatchRow from '../components/MatchRow.jsx'
 import StandingsTable from '../components/StandingsTable.jsx'
 import { ScorerList } from './Stats.jsx'
 import Story from '../story/Story.jsx'
+import Venue from '../components/Venue.jsx'
 
 export function HomeContent() {
   const { matches } = useTournament()
@@ -15,6 +16,7 @@ export function HomeContent() {
         <div className="section-head"><h2>Match day</h2><Link to="/matches">All 13 matches</Link></div>
         <div className="board">{around.map(m => <MatchRow key={m.id} match={m} />)}</div>
       </section>
+      <Venue />
       <section className="section">
         <div className="section-head"><h2>Table</h2><Link to="/table">Knockouts</Link></div>
         <StandingsTable />
