@@ -62,14 +62,37 @@ export function TournamentProvider({ children }) {
       } })
       setLoading(false)
     }
+    // Light refresh of only the match-day tables (3 small queries).
+    async function refreshLive() {
+      const [matches, events, lineups] = await Promise.all([
+        supabase.from('matches').select('*').order('kickoff_at'),
+        supabase.from('match_events').select('*').order('created_at'),
+        supabase.from('lineups').select('*'),
+      ])
+      if (!alive || matches.error || events.error || lineups.error) return
+      dispatch({ type: 'load', data: { matches: matches.data, events: events.data, lineups: lineups.data } })
+    }
     load()
+    // Realtime pushes changes instantly. If the project hits its realtime connection limit
+    // (Supabase Free: 200, Pro: 500) the join is refused; those visitors fall back to polling.
+    let live = false, timer = null
+    const schedule = () => {
+      clearInterval(timer)
+      timer = setInterval(() => { if (document.visibilityState === 'visible') refreshLive() }, live ? 60_000 : 15_000)
+    }
     const channel = supabase.channel('mml-live')
       .on('postgres_changes', { event: '*', schema: 'public' }, p =>
         dispatch({ type: 'change', table: p.table, op: p.eventType, row: p.new, old: p.old }))
-      .subscribe(status => { if (status === 'SUBSCRIBED') load() }) // re-sync after reconnect
-    const onVisible = () => document.visibilityState === 'visible' && load()
+      .subscribe(status => {
+        const was = live
+        live = status === 'SUBSCRIBED'
+        if (live && !was) refreshLive() // re-sync after (re)connect
+        if (live !== was || !timer) schedule()
+      })
+    schedule()
+    const onVisible = () => document.visibilityState === 'visible' && refreshLive()
     document.addEventListener('visibilitychange', onVisible)
-    return () => { alive = false; supabase.removeChannel(channel); document.removeEventListener('visibilitychange', onVisible) }
+    return () => { alive = false; clearInterval(timer); supabase.removeChannel(channel); document.removeEventListener('visibilitychange', onVisible) }
   }, [])
 
   const value = useMemo(() => {

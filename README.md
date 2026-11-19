@@ -36,6 +36,12 @@ Live scores, scorers, lineups and table for **MML 4.0** (Sunday 22 November 2026
 - **Fixtures**: set real kick-off times (seeded at 10:00 with 15-minute slots).
 - **Lineups**: pick formation + 5 starters per match ("Copy last lineup" saves time).
 
+## Crowd size
+Vercel serves the site itself from its CDN, so visitor numbers aren't a concern there. The limit is Supabase Realtime (live push):
+**Free = 200 viewers at once, Pro = 500** (Pro without spend cap: 10,000). Visitors over the limit still see
+everything; their phone refreshes scores every 15 s instead of instantly. For ~300 people on match day, switch
+the project to **Pro** for that month.
+
 ## Match day (one phone at the touchline)
 1. **Live** opens on the current match. **Start match** starts the 10-minute clock.
 2. **⚽ Goal** under the scoring team → tap the scorer. Own goal: pick from the opponent list in the same sheet.
