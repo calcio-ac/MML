@@ -26,6 +26,7 @@ export default function MatchRow({ match }) {
     <Link to={`/match/${match.id}`} className={`mrow${live ? ' is-live' : ''}`}>
       <div className="when">
         <div>{kickoff(match.kickoff_at)}</div>
+        <span className="stage">{stageShort(match)}</span>
         <StatusPill match={match} />
       </div>
       <div className="side home"><Crest team={h} /><span>{h?.name ?? sourceLabel(match.home_source)}</span></div>
@@ -34,7 +35,6 @@ export default function MatchRow({ match }) {
         {match.home_pens != null && match.status === 'ft' && <div style={{ fontSize: 13, fontFamily: 'var(--body)', color: 'var(--paper-dim)' }}>pens {match.home_pens}–{match.away_pens}</div>}
       </div>
       <div className="side away"><Crest team={a} /><span>{a?.name ?? sourceLabel(match.away_source)}</span></div>
-      <span className="stage">{stageShort(match)}</span>
     </Link>
   )
 }
