@@ -4,6 +4,7 @@ import { TournamentProvider, useTournament, DEMO } from './store/TournamentConte
 import LiveBar from './components/LiveBar.jsx'
 import TabBar from './components/TabBar.jsx'
 import Footer from './components/Footer.jsx'
+import Sponsors from './components/Sponsors.jsx'
 import Home from './pages/Home.jsx'
 import Matches from './pages/Matches.jsx'
 import Match from './pages/Match.jsx'
@@ -28,7 +29,7 @@ function PublicShell({ children }) {
       {DEMO && <p className="notice" style={{ position: 'fixed', top: 56, left: 12, right: 12, zIndex: 25, margin: 0, padding: '6px 12px' }}>Preview with sample data. Scores aren't real until Supabase is connected.</p>}
       {error && <p className="notice" style={{ position: 'fixed', top: 60, left: 16, right: 16, zIndex: 40 }}>Can't reach the scores server: {error}. Pull to refresh in a moment.</p>}
       {children}
-      <div className="page" style={{ paddingTop: 0 }}><Footer /></div>
+      <div className="page" style={{ paddingTop: 0 }}><Sponsors /><Footer /></div>
       <TabBar />
     </div>
   )

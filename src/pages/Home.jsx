@@ -2,7 +2,6 @@ import { Link } from 'react-router-dom'
 import { useTournament } from '../store/TournamentContext.jsx'
 import MatchRow from '../components/MatchRow.jsx'
 import StandingsTable from '../components/StandingsTable.jsx'
-import Sponsors from '../components/Sponsors.jsx'
 import { ScorerList } from './Stats.jsx'
 import Story from '../story/Story.jsx'
 
@@ -24,7 +23,6 @@ export function HomeContent() {
         <div className="section-head"><h2>Golden Boot</h2><Link to="/stats">All scorers</Link></div>
         <ScorerList limit={5} />
       </section>
-      <Sponsors />
     </main>
   )
 }
