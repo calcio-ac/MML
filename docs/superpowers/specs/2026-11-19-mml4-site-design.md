@@ -29,6 +29,7 @@ but the boy who played football by the backwaters is still alive in him, and he 
 - Anyone without the admin login being able to change data.
 
 ## Constraints
+- Match length: **one single half of 10 minutes** (no half-time); configurable in admin.
 - Live by **Sun 22 Nov 2026**. One pitch, 13 matches in one day.
 - Must work well on mid-range phones on 4G outdoors (contrast, size, weight).
 - Supabase (database, realtime, auth). Repo: `github.com/calcio-ac/MML`. Deploy on Vercel.
@@ -73,7 +74,7 @@ Squad: up to 10 players (name + position: GK/DEF/MID/FWD), 1 manager, 1 team dir
 6. **Stats** — top scorers (Golden Boot), cards.
 
 **Admin (`/admin`, login required):**
-- **Live** (default on match day): next/current match; Start / Half-time / Resume / End;
+- **Live** (default on match day): next/current match; Start / Pause / Resume / End (single 10-min half; clock shows 10:00+ as added time);
   big ⚽ GOAL per team → tap scorer chip (or Own goal) → minute auto from match clock;
   🟨/🟥 card; ↩ Undo last event. Score is derived from goal events (single source of truth).
 - **Lineups**: per match per team pick formation preset (2-2, 1-2-1, 2-1-1, 3-1, 1-1-2) and tap
@@ -81,7 +82,7 @@ Squad: up to 10 players (name + position: GK/DEF/MID/FWD), 1 manager, 1 team dir
 - **Teams & players**: add/edit team (name, crest upload, colours, manager, team director), players (name, position).
 - **Fixtures**: generate round-robin automatically, edit times; knockouts auto-filled from table (editable).
 - **Sponsors**: add/reorder/remove logos + optional link; tier (title / partner).
-- **Settings**: match duration, halves on/off.
+- **Settings**: match duration (default 10 min, single half).
 
 ## Data model (Supabase / Postgres)
 - `teams(id, name, short_name, logo_url, primary_color, secondary_color, manager, team_director, sort)`
