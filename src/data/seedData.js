@@ -18,8 +18,8 @@ export const SPONSORS = [
   ["God's Own Country Films", 'gods-own-country-films', 'partner'],
 ].map(([name, f, tier], i) => ({ id: f, name, logo_url: `/logos/sponsors/${f}.webp`, url: null, tier, sort: i }))
 
-// Sunday 22 Nov 2026, 10:00 Europe/Rome (UTC+1) = 09:00Z. One pitch: 10' match + 5' changeover.
-const START = Date.parse('2026-11-22T09:00:00Z'), SLOT = 15 * 60_000
+// Sunday 22 Nov 2026, 10:00 Europe/Rome (UTC+1) = 09:00Z. One pitch: 10' match + 3' changeover.
+const START = Date.parse('2026-11-22T09:00:00Z'), SLOT = 13 * 60_000
 const at = i => new Date(START + i * SLOT).toISOString()
 
 export function buildMatches() {
@@ -30,7 +30,7 @@ export function buildMatches() {
   return [...group,
     { ...base, id: 'SF1', stage: 'sf', number: 1, home_team_id: null, away_team_id: null, home_source: 'G1', away_source: 'G4', kickoff_at: at(10) },
     { ...base, id: 'SF2', stage: 'sf', number: 2, home_team_id: null, away_team_id: null, home_source: 'G2', away_source: 'G3', kickoff_at: at(11) },
-    { ...base, id: 'F', stage: 'final', number: 1, home_team_id: null, away_team_id: null, home_source: 'W:SF1', away_source: 'W:SF2', kickoff_at: at(13) },
+    { ...base, id: 'F', stage: 'final', number: 1, home_team_id: null, away_team_id: null, home_source: 'W:SF1', away_source: 'W:SF2', kickoff_at: at(12) },
   ]
 }
 export const SETTINGS = { match_minutes: 10, match_day: '2026-11-22' }

@@ -19,18 +19,18 @@ insert into sponsors (name, logo_url, tier, sort) select * from (values
 
 insert into matches (id, stage, number, home_team_id, away_team_id, home_source, away_source, kickoff_at) values
   ('G1', 'group', 1, 'real-garibaldi', 'moscova-mafia', null, null, '2026-11-22T09:00:00.000Z'),
-  ('G2', 'group', 2, 'sexy-sesto', 'atletico-affori', null, null, '2026-11-22T09:15:00.000Z'),
-  ('G3', 'group', 3, 'frattini-fratelli', 'real-garibaldi', null, null, '2026-11-22T09:30:00.000Z'),
-  ('G4', 'group', 4, 'moscova-mafia', 'sexy-sesto', null, null, '2026-11-22T09:45:00.000Z'),
-  ('G5', 'group', 5, 'atletico-affori', 'frattini-fratelli', null, null, '2026-11-22T10:00:00.000Z'),
-  ('G6', 'group', 6, 'real-garibaldi', 'sexy-sesto', null, null, '2026-11-22T10:15:00.000Z'),
-  ('G7', 'group', 7, 'moscova-mafia', 'atletico-affori', null, null, '2026-11-22T10:30:00.000Z'),
-  ('G8', 'group', 8, 'sexy-sesto', 'frattini-fratelli', null, null, '2026-11-22T10:45:00.000Z'),
-  ('G9', 'group', 9, 'atletico-affori', 'real-garibaldi', null, null, '2026-11-22T11:00:00.000Z'),
-  ('G10', 'group', 10, 'frattini-fratelli', 'moscova-mafia', null, null, '2026-11-22T11:15:00.000Z'),
-  ('SF1', 'sf', 1, null, null, 'G1', 'G4', '2026-11-22T11:30:00.000Z'),
-  ('SF2', 'sf', 2, null, null, 'G2', 'G3', '2026-11-22T11:45:00.000Z'),
-  ('F', 'final', 1, null, null, 'W:SF1', 'W:SF2', '2026-11-22T12:15:00.000Z')
+  ('G2', 'group', 2, 'sexy-sesto', 'atletico-affori', null, null, '2026-11-22T09:13:00.000Z'),
+  ('G3', 'group', 3, 'frattini-fratelli', 'real-garibaldi', null, null, '2026-11-22T09:26:00.000Z'),
+  ('G4', 'group', 4, 'moscova-mafia', 'sexy-sesto', null, null, '2026-11-22T09:39:00.000Z'),
+  ('G5', 'group', 5, 'atletico-affori', 'frattini-fratelli', null, null, '2026-11-22T09:52:00.000Z'),
+  ('G6', 'group', 6, 'real-garibaldi', 'sexy-sesto', null, null, '2026-11-22T10:05:00.000Z'),
+  ('G7', 'group', 7, 'moscova-mafia', 'atletico-affori', null, null, '2026-11-22T10:18:00.000Z'),
+  ('G8', 'group', 8, 'sexy-sesto', 'frattini-fratelli', null, null, '2026-11-22T10:31:00.000Z'),
+  ('G9', 'group', 9, 'atletico-affori', 'real-garibaldi', null, null, '2026-11-22T10:44:00.000Z'),
+  ('G10', 'group', 10, 'frattini-fratelli', 'moscova-mafia', null, null, '2026-11-22T10:57:00.000Z'),
+  ('SF1', 'sf', 1, null, null, 'G1', 'G4', '2026-11-22T11:10:00.000Z'),
+  ('SF2', 'sf', 2, null, null, 'G2', 'G3', '2026-11-22T11:23:00.000Z'),
+  ('F', 'final', 1, null, null, 'W:SF1', 'W:SF2', '2026-11-22T11:36:00.000Z')
 on conflict (id) do nothing;
 
 insert into settings (key, value) values

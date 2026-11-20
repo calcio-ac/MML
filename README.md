@@ -33,7 +33,7 @@ Live scores, scorers, lineups and table for **MML 4.0** (Sunday 22 November 2026
 
 ### 4. Before Sunday
 - **Teams**: add each squad (max 10, position GK/DEF/MID/FWD), manager and team director.
-- **Fixtures**: set real kick-off times (seeded at 10:00 with 15-minute slots).
+- **Fixtures**: set real kick-off times (seeded at 10:00, one every 13 minutes: 10' match + 3' break).
 - **Lineups**: pick formation + 5 starters per match ("Copy last lineup" saves time).
 
 ## Crowd size
